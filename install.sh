@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Versions
 go_version="1.16.6"
-compose_version=1.29.2
+docker_compose_version=1.29.2
 tig_version=2.3.3
 
 dotfiles_dir="$HOME/.dots"
