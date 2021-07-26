@@ -1,0 +1,76 @@
+alias ls="ls --color=auto"
+alias ls="ls --color=auto"
+alias ll='ls -alF'
+
+# Copy, pipe to this to copy output of a command
+alias copy="xclip -i -sel clip"
+
+alias nnn='nnn -H'
+
+alias k="kubectl"
+
+# tig
+alias ts="tig status"
+
+# nvim
+alias vi="NVIM_LISTEN_ADDRESS=/tmp/nvimsocket nvim"
+
+# cd (cXXX)
+alias cdot="cd $HOME/.dots"
+
+# Config (cf[XX])
+alias cftc="vi $HOME/.dots/tmux/.tmux.conf"
+alias cfiv="vi $HOME/.dots/nvim/.config/nvim/init.vim"
+
+# Docker (dX[X])
+alias ds="docker stop"
+alias drm="docker rm"
+alias dt="docker start"
+alias dps="docker ps"
+alias dsa='docker stop $(docker ps -a -q)'
+alias dra='docker rm $(docker ps -a -q)'
+alias da="docker attach --sig-proxy=false"
+alias dl="docker logs"
+alias dlf="docker logs -f"
+
+# Docker compose (dc[XX])
+alias dc="docker-compose"
+alias dcl="docker-compose logs"
+alias dcu="docker-compose up"
+alias dcud="docker-compose up -d"
+alias dcb="docker-compose build"
+alias dcs="docker-compose stop"
+
+# Go (go[XX])
+alias got="go test"
+alias gota="go test ./..."
+
+# Git (g[XXX])
+alias gcd='cd $(git rev-parse --show-toplevel)'
+alias ga='git add'
+alias gl='git log'
+alias gaa='git add . && git status'
+alias gp="git push"
+alias gc="git commit"
+#alias gh="git checkout"
+alias ghb="git checkout -b"
+alias gs="git status"
+alias gf="git fetch"
+alias gu="git pull"
+alias gd="git diff"
+alias gm="git merge"
+alias gst="git stash"
+alias gstp="git stash push"
+alias gsto="git stash pop"
+alias gzm="git-merge"
+alias gzh="git-checkout"
+alias git-commit-date='git add . && git commit -m "$(date)"'
+
+# JWT
+alias decode-jwt-header="decode-jwt 1"
+alias decode-jwt-payload="decode-jwt 2"
+
+# Utils (u[XXX])
+alias sourcebash="source $HOME/.bashrc"
+
+alias lynx="lynx -vikeys"

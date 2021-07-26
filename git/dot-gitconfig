@@ -1,0 +1,5 @@
+[user]
+  email = xqg3s89b@anonaddy.me
+  name = Oliver Knights
+[include]
+  path = ~/.gitconfig_shared

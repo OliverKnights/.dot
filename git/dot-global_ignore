@@ -1,0 +1,18 @@
+# Ignore tags file, excluding directories named tag
+tags
+!tags/
+
+nohup.out
+.projections.json
+.DS_Store
+yarn-error.log
+.envrc
+.ccls
+.ccls-cache/
+.env
+.idea/
+.bin
+
+# Use the override file for specifying config locally without accidentally commiting it to git (becauase it's in docker-compose.yml or config.env)
+# REMEMBER THIS IF YOU EVER NEED TO ACTAULLY ADD AN OVERRIDE FILE TO A PROJECT
+docker-compose.override.yml

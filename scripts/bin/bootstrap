@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -uo pipefail
+
+dotfiles_dir="$HOME/.dots/"
+
+stow_dirs=(alacritty bash git i3 nvim picom readline scripts tmux)
+
+function dispatch_os() {
+    command="$1"
+    shift
+    os="$(cat /etc/os-release | grep '^NAME' | sed 's/NAME=//')"
+    if [[ "${command}" == "install" ]]; then
+        if [[ "${os}" == "Fedora" ]]; then
+            sudo dnf install "$@"
+        fi
+    fi
+}
+
+install() {
+    echo "Updating..."
+    
+    # sudo apt update && sudo apt upgrade -y
+    # sudo apt autoremove -y
+    dispatch_os install stow make cmake curl git htop jq ncdu pandoc python3 python3-pip tlp zsh tmux fasd
+
+
+    echo "Symlinking with stow.."
+    for dir in "${stow_dirs[@]}"; do
+        echo "Linking $dir..."
+        stow -d "$dotfiles_dir" "$dir"
+    done
+}
+
+uninstall() {
+    for dir in "${stow_dirs[@]}"; do
+        echo "Unlinking $dir..."
+        stow -d "$dotfiles_dir" -D "$dir"
+    done
+}
+
+help() {
+    cat <<EOF
+install
+
+uninstall
+
+help
+EOF
+}
+
+command="${1:-help}"
+case $command in
+    install)
+        install
+        ;;
+
+    uninstall)
+        uninstall
+        ;;
+
+    help)
+        help
+        ;;
+esac

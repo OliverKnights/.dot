@@ -1,0 +1,30 @@
+[core]
+  excludesfile = ~/.global_ignore
+  editor = nvim
+[pager]
+  log  = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+  show = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+  diff = perl /usr/share/doc/git/contrib/diff-highlight/diff-highlight | less
+#[color "diff-highlight"]
+#  oldNormal = "white #f8cbcb"
+#  oldHighlight = "white #ffaaaa"
+#  newNormal = "white #cbeecb"
+#  newHighlight = "white #aaffaa"
+[color]
+  ui = always
+[push]
+  default = current
+[interactive]
+  singleKey = true
+  syntax-theme = Monokai Extended
+[status]
+  submoduleSummary = true
+
+[mergetool "nvim"]
+  cmd = nvim -d
+# set "nvim" as tool for merging
+[merge]
+  tool = nvim
+# automatically launch merge tool without displaying a prompt
+[mergetool]
+  prompt = false
