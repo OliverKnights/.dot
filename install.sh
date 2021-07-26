@@ -4,7 +4,7 @@ set -euo pipefail
 
 # Versions
 go_version="1.16.6"
-docker_compose_version=1.29.2
+compose_version=1.29.2
 tig_version=2.3.3
 
 dotfiles_dir="$HOME/.dots"
@@ -19,6 +19,17 @@ function binary_exists() {
   local binary
   binary="$1"
   if [[ -x "$(which $1)" ]]; then
+    return 0
+  fi
+
+  return 1
+}
+
+function ask_user() {
+  question="$1"
+  echo $question
+  read -n1 -p "[y|n]? " optional
+  if [[ "$optional" =~ y ]]; then
     return 0
   fi
 
@@ -51,7 +62,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       mysql-client \
       python3 \
       python3-pip \
-      mc \
+      nnn \
       software-properties-common \
       taskwarrior \
       tcpdump \
@@ -75,10 +86,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       newsboat \
       meld \
       mutt"
-    echo "Do you require the following optional packages: $optional_packages"
-    read -n1 -p "[y|n]? " optional
-      
-    if [[ "$optional" =~ y|n ]]; then
+    if ask_user "Do you require the following optional packages: $optional_packages"; then
       sudo apt install -y $optional_packages
     fi
 
@@ -93,16 +101,15 @@ if [[ "$os" =~ "Ubuntu" ]]; then
         popd
     fi
 
-    ! git clone https://github.com/wbthomason/packer.nvim \
-      ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-
-    pip3 install neovim neovim-remote 'python-lsp-server[all]'
+    pip3 install neovim neovim-remote
 
     # Gh
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt update
-    sudo apt install gh
+    if ask_user "Do you require github client?"; then
+      curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+      sudo apt update
+      sudo apt install gh
+    fi
 
     # Docker
     if ! binary_exists docker; then
@@ -130,7 +137,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     fi
 
     GO111MODULE=on go get golang.org/x/tools/gopls@latest
-    go get -u github.com/jesseduffield/lazygit
+    go get -u github.com/jstemmer/gotags
 
     # FZF
     if ! binary_exists fzf; then
@@ -139,19 +146,18 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     fi
     ! source $HOME/.bashrc
 
-    if ! binary_exists node; then
-      pushd /tmp
-      curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-      sudo bash nodesource_setup.sh
-      sudo apt install nodejs
-      popd
-    fi
+    if ask_user "Do you require node?"; then 
+      if ! binary_exists node; then
+        pushd /tmp
+        curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+        sudo bash nodesource_setup.sh
+        sudo apt install nodejs
+        popd
+      fi
 
-    mkdir -p $HOME/.npm-global
-    npm config set prefix "$HOME/.npm-global"
-    npm install -g typescript-language-server
-    npm install -g vls
-    npm install -g bash-language-server
+      mkdir -p $HOME/.npm-global
+      npm config set prefix "$HOME/.npm-global"
+    fi
     
     if ! binary_exists tig; then
       pushd /tmp

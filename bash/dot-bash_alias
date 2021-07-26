@@ -5,7 +5,7 @@ alias ll='ls -alF'
 # Copy, pipe to this to copy output of a command
 alias copy="xclip -i -sel clip"
 
-alias nnn='nnn -H'
+alias nnn='nnn -H -e'
 
 alias k="kubectl"
 
