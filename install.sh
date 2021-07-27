@@ -64,7 +64,6 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       python3-pip \
       nnn \
       software-properties-common \
-      taskwarrior \
       tcpdump \
       xclip \
       apt-transport-https \

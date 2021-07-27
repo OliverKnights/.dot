@@ -1,5 +1,2 @@
-emacs/.emacs.d/private.el
-nvim/.config/nvim/plugin/packer_compiled.vim
 .zcompdump
-emacs/.emacs.d/*
-gpg/dot-gnupg/*
+gpg/.gnupg/*

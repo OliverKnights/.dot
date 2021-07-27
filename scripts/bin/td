@@ -1,0 +1,18 @@
+#!/bin/bash
+
+todo="$HOME/todo.txt"
+
+cmd="$1"
+
+# Print last 50 lines of todos
+if [[ -z "$cmd" ]]; then
+  tail -n50 $todo
+  exit 0
+fi
+
+if [[ "$cmd" == "e" ]]; then
+  nvim + $todo
+  exit 0
+fi
+
+echo "- $@" >> $todo

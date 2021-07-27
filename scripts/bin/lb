@@ -30,6 +30,11 @@ if [[ "$cmd" == "d" ]]; then
   exit 0
 fi
 
+if [[ "$cmd" == "e" ]]; then
+  nvim + $logbook
+  exit 0
+fi
+
 function append_date() {
   echo "$current_day" > $last_entry_file
   echo "" >> $logbook
