@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cmd="$1"
+if [[ "$cmd" == "i" ]]; then 
+  shift
+  git submodule add "$1" ~/.dots/nvim/.local/share/nvim/site/pack/plugins/start/$(basename $1)
+  stow --dotfiles --adopt nvim
+fi
