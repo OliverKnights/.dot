@@ -42,6 +42,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     sudo apt install git
     if [[ ! -d "$dotfiles_dir" ]]; then
       git clone https://github.com/OliverKnights/.dots "$dotfiles_dir"
+      git submodule update --recursive
     fi
 
     sudo apt install -y \
@@ -71,7 +72,8 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       lsb-release
 
     pushd "$dotfiles_dir"
-    stow --override=^.*$ --dotfiles $(ls -d */)
+    stow --adopt --dotfiles $(ls -d */)
+
     ! source $HOME/.bash_profile
     ! source $HOME/.bashrc
 
