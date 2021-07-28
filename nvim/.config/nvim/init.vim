@@ -41,6 +41,8 @@ nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <Leader>vl <cmd>luafile %<cr>
 nnoremap <Leader>vL <cmd>e ~/.config/nvim/lua<cr>
 
+nnoremap <Leader>fi :fin<space>
+
 " Open in browser
 nmap gx <Plug>NetrwBrowseX
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())<CR>
