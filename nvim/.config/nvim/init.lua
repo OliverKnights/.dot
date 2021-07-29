@@ -19,6 +19,7 @@ o.smartcase=true -- if we use caps in search, turn off ignore case
 o.inccommand='nosplit' -- show replacements in place 
 o.infercase=true -- smarter completion
 o.mouse='a'
+o.viewoptions='folds,cursor,curdir' -- don't save locally modified options
 
 o.autoindent=true
 o.smartindent=true
