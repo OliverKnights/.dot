@@ -1,18 +1,111 @@
 #!/bin/bash
 
+td_home=$HOME/.local/share/td
 todo="$HOME/todo.txt"
+archive="$HOME/archive.txt"
+task_notes="$HOME/task_notes"
+current_task_desc="${td_home}/current/description"
+current_task_filename="${td_home}/current/filename"
+current_task_number="${td_home}/current/number"
+
+mkdir -p $td_home/current
 
 cmd="$1"
 
-# Print last 50 lines of todos
+# Print the current task
 if [[ -z "$cmd" ]]; then
+  if [[ -s $current_task_desc ]]; then
+    cat $current_task_desc
+  else
+    echo "No Current task"
+  fi
+  exit 0
+fi
+
+# Print last 50 lines of todos
+if [[ "$cmd" == "p" ]]; then
   tail -n50 $todo
   exit 0
 fi
 
+# Edit todos manually
 if [[ "$cmd" == "e" ]]; then
   nvim + $todo
   exit 0
 fi
 
-echo "- $@" >> $todo
+# Start a task
+# This creates a new task notes file in $task_notes
+# Only one task can be started at a time
+if [[ "$cmd" == "s" ]]; then
+  shift
+
+  if [[ -s $current_task_desc ]]; then
+    echo "Task '$(cat $current_task_desc)' in progress."
+    exit 1
+  fi
+
+  number="$1"
+
+  task=$(sed -n "/^${number}\./p" $todo)
+  task_filename=$(echo $task | sed "s/^${number}"'\.\s\+\(.*\)/\1/; s/\(\s\|\/\)\+/-/g').txt
+
+  echo $task > $current_task_desc
+  echo $task_filename > $current_task_filename
+  echo $number > $current_task_number
+  timestamp=$(date +%Y%m%d%H%M%S)
+
+  exit 0
+fi
+
+# Complete a task
+if [[ "$cmd" == "d" ]]; then
+  if [[ -s $current_task_desc ]]; then
+    cat $current_task_desc >> $archive
+    sed -i "/^${number}\./d" $todo
+    rm $current_task_desc
+    rm $current_task_filename
+  else
+    echo "No current task"
+  fi
+
+  exit 0
+fi
+
+# Stop a task (not completed)
+if [[ "$cmd" == "o" ]]; then
+  if [[ -s $current_task_desc ]]; then
+    cat $current_task_desc >> $archive
+    rm $current_task_desc
+    rm $current_task_filename
+  else
+    echo "No current task"
+  fi
+
+  exit 0
+fi
+
+# Add notes to the current task
+if [[ "$cmd" == "n" ]]; then
+  shift
+
+  note="$@"
+  # if no note provided, open in vim
+  if [[ -z $note ]]; then
+    if [[ ! -d $task_notes ]]; then
+      mkdir $task_notes
+    fi
+
+    nvim + $task_notes/$(cat $current_task_filename)
+    exit 0
+  fi
+
+  # otherwise append to note file
+  echo $note >> $task_notes/$(cat $current_task_filename)
+
+  exit 0
+fi
+
+# Otherwise add a new task
+last_num=$(tail -n1 $todo | sed 's/\(^[0-9]*\)\..*/\1/')
+echo "$(( ${last_num} + 1 )). $@" >> $todo

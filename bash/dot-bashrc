@@ -187,21 +187,14 @@ export GO111MODULE=on
 
 export NODE_PATH=/usr/local/lib/node_modules # Allow node repl to import global modules
 
-export FZF_DEFAULT_COMMAND='rg \
-             --files \
-             --hidden \
-             --follow \
-             -g "!{.git,.ccls-cache,node_modules,bin,Library,Downloads,Music,.Trash,.Private,.cache,snap,tags}/" \
-             -g "!tags" \
-             -g "!.DS_Store" \
-             -g "!vendor" \
-             --ignore-file "./.project_ignore"'
+# Find files, follow links
+export FZF_DEFAULT_COMMAND="find -L . -type f \
+  ! -path '*/.git/*'"
 
 # better less
 export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
 
 export LD_LIBRARY_PATH=/usr/local/lib
-
 
 export dotfiles_dir="$HOME/.dots"
 export project_dir="$HOME/src"

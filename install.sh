@@ -72,7 +72,8 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       lsb-release
 
     pushd "$dotfiles_dir"
-    stow --adopt --dotfiles $(ls -d */)
+    stow --dotfiles $(ls -d */)
+    mkdir -p $HOME/.local/share/nvim/session
 
     ! source $HOME/.bash_profile
     ! source $HOME/.bashrc

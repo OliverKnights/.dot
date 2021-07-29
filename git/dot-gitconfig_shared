@@ -28,3 +28,11 @@
 # automatically launch merge tool without displaying a prompt
 [mergetool]
   prompt = false
+
+[diff]
+  tool = nvimdiff
+[difftool "nvimdiff"]
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+# set "nvim" as tool for merging
+[difftool]
+  prompt = true

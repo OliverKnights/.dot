@@ -35,11 +35,18 @@ g.browsedir='buffer'
 
 o.path='.,,**'
 o.wildignore='*/vendor/*,*.tar.gz'
+o.runtimepath=o.runtimepath .. vim.fn.expand(',$HOME/.fzf')
+
+g.mapleader=" "
+
+nmap('n', '<Leader>zf', ':FZF<CR>', { noremap = true })
 
 nmap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 
-g.mapleader=" "
 nmap('n', '<Leader>gr', ':silent grep --exclude=\'*.tar.gz\' -R \'\' .<left><left><left>', { noremap = true })
+
+nmap('n', '<Leader>ss', ':mksession! ~/.local/share/nvim/session/', { noremap = true })
+nmap('n', '<Leader>so', ':source ~/.local/share/nvim/session/', { noremap = true })
 
 nmap('n', '<Leader>bo', ':bro ol<CR>', { noremap = true })
 
