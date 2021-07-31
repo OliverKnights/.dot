@@ -1,15 +1,11 @@
 local o = vim.o
+local cmd = vim.cmd
 local g = vim.g
 
 local api = vim.api
 local nmap=api.nvim_set_keymap
 
-o.shiftwidth=2 -- spaces to indent by
-o.tabstop=2 -- spaces <Tab> is in the file
-o.softtabstop=2 -- spaces <Tab> is when editing
-o.expandtab=true -- use spaces
 o.autoread=true -- source file changes
-o.autowriteall=true -- auto save
 o.background='light'
 o.clipboard='unnamedplus' -- copy to system clipboard always
 o.hidden=true -- change buffers without saving
@@ -20,6 +16,9 @@ o.inccommand='nosplit' -- show replacements in place
 o.infercase=true -- smarter completion
 o.mouse='a'
 o.viewoptions='folds,cursor,curdir' -- don't save locally modified options
+o.lazyredraw=true -- don't update screen during macros
+
+o.completeopt = "menuone,noselect" -- suggested settings for completion
 
 o.autoindent=true
 o.smartindent=true
@@ -53,16 +52,36 @@ nmap('n', '<Leader>bo', ':bro ol<CR>', { noremap = true })
 nmap('n', '<Leader>vi', '<cmd>e $MYVIMRC<cr>', { noremap = true })
 nmap('n', '<Leader>vr', '<cmd>source $MYVIMRC<cr>', { noremap = true })
 nmap('n', '<Leader>vl', '<cmd>luafile %<cr>', { noremap = true })
-nmap('n', '<Leader>vL', '<cmd>e ~/.config/nvim/lua<cr>', { noremap = true })
 
 nmap('n', '<Leader>fi', ':fin<space>', { noremap = true })
 
--- Open in browser
+-- Disable netrw, but autoload it for `gx`.
+cmd('let g:loaded_netrwPlugin = 0')
 nmap('n', 'gx', '<Plug>NetrwBrowseX', {})
 nmap('n', '<Plug>NetrwBrowseX', ':call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : "<cfile>")),netrw#CheckIfRemote())<CR>', { noremap = true, silent = true })
 
-api.nvim_command('augroup make_view')
-api.nvim_command('autocmd!')
-api.nvim_command('autocmd BufWinLeave *.* mkview')
-api.nvim_command('autocmd BufWinEnter *.* silent! loadview')
-api.nvim_command('augroup END')
+cmd('augroup make_view')
+cmd('autocmd!')
+cmd('autocmd BufWinLeave *.* mkview')
+cmd('autocmd BufWinEnter *.* silent! loadview')
+cmd('augroup END')
+
+cmd('let g:tmux_navigator_no_mappings = 1')
+
+nmap('n', '<M-h>', ':silent TmuxNavigateLeft<cr>', { noremap = true })
+nmap('n', '<M-j>', ':silent TmuxNavigateDown<cr>', { noremap = true })
+nmap('n', '<M-k>', ':silent TmuxNavigateUp<cr>', { noremap = true})
+nmap('n', '<M-l>', ':silent TmuxNavigateRight<cr>', { noremap = true})
+nmap('n', '<M-\\>', ':silent TmuxNavigatePrevious<cr>', { noremap = true})
+nmap('i', '<M-h>', '<esc>:silent TmuxNavigateLeft<cr>', { noremap = true })
+nmap('i', '<M-j>', '<esc>:silent TmuxNavigateDown<cr>', { noremap = true })
+nmap('i', '<M-k>', '<esc>:silent TmuxNavigateUp<cr>', { noremap = true})
+nmap('i', '<M-l>', '<esc>:silent TmuxNavigateRight<cr>', { noremap = true})
+nmap('i', '<M-\\>', '<esc>:silent TmuxNavigatePrevious<cr>', { noremap = true})
+
+-- Automatically source changes
+cmd('autocmd BufWritePost plugins.lua source <afile> | PackerCompile')
+
+require'plugins'
+
+

@@ -38,59 +38,74 @@ function ask_user() {
 
 os="$(cat /etc/os-release | grep '^NAME')"
 if [[ "$os" =~ "Ubuntu" ]]; then
-    sudo apt update && sudo apt upgrade -y
-    sudo apt install git
-    if [[ ! -d "$dotfiles_dir" ]]; then
-      git clone https://github.com/OliverKnights/.dots "$dotfiles_dir"
-      git submodule update --recursive
+  sudo apt update && sudo apt upgrade -y
+  sudo apt install -y git
+  if [[ ! -d "$dotfiles_dir" ]]; then
+    git clone https://github.com/OliverKnights/.dots "$dotfiles_dir"
+  fi
+
+  sudo apt install -y \
+    stow \
+    curl \
+    tmux \
+    tree \
+    wget \
+    make 
+
+  pushd "$dotfiles_dir"
+
+  for dir in $(ls -d */); do
+    if [[ "$dir" == "shell" ]]; then
+      continue
     fi
 
-    sudo apt install -y \
-	    stow \
-	    curl \
-      tmux \
-      tree \
-	    wget \
-	    tig \
-	    shellcheck \
-	    build-essential \
-	    ca-certificates \
-	    make \
-	    cmake \
-	    direnv \
-      jq \
-      ncdu \
-      mysql-client \
-      python3 \
-      python3-pip \
-      nnn \
-      software-properties-common \
-      tcpdump \
-      xclip \
-      apt-transport-https \
-      gnupg \
-      lsb-release
+    stow --dotfiles "$dir"
+  done
 
-    pushd "$dotfiles_dir"
-    stow --dotfiles $(ls -d */)
-    mkdir -p $HOME/.local/share/nvim/session
+  mkdir -p $HOME/.local/share/nvim/session
 
-    ! source $HOME/.bash_profile
-    ! source $HOME/.bashrc
+  if ask_user "Minimal install?"; then
+    exit 0
+  fi
 
-    optional_packages="network-manager-openvpn \
-      gnome-tweak-tool \
-      tlp \
-	    g++ \
-      pandoc \
-      htop \
-      texlive-full \
-      newsboat \
-      meld \
-      mutt"
-    if ask_user "Do you require the following optional packages: $optional_packages"; then
-      sudo apt install -y $optional_packages
-    fi
+  sudo apt install -y \
+    zsh \
+    tig \
+    entr \
+    shellcheck \
+    build-essential \
+    ca-certificates \
+    make \
+    cmake \
+    direnv \
+    jq \
+    ncdu \
+    mysql-client \
+    python3 \
+    python3-pip \
+    nnn \
+    software-properties-common \
+    tcpdump \
+    xclip \
+    apt-transport-https \
+    gnupg \
+    lsb-release
+
+  optional_packages="network-manager-openvpn \
+    gnome-tweak-tool \
+    tlp \
+    g++ \
+    pandoc \
+    htop \
+    texlive-full \
+    newsboat \
+    meld \
+    mutt"
+      if ask_user "Do you require the following optional packages: $optional_packages"; then
+        sudo apt install -y $optional_packages
+      fi
+
+    chsh -s /usr/bin/zsh
 
     # Neovim
     if ! binary_exists nvim; then
@@ -106,7 +121,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     pip3 install neovim neovim-remote
 
     # Gh
-    if ask_user "Do you require github client?"; then
+    if ! binary_exists gh && ask_user "Do you require github client?"; then
       curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
       sudo apt update
@@ -118,16 +133,16 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg 
       echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
         $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      sudo apt update
-      sudo apt install -y docker-ce
-      sudo usermod -aG docker ${USER}
+              sudo apt update
+              sudo apt install -y docker-ce
+              sudo usermod -aG docker ${USER}
     fi
 
     # Docker Compose
     if binary_exists docker-compose; then
       sudo curl -L "https://github.com/docker/compose/releases/download/${docker_compose_version}/docker-compose-$(uname -s)-$(uname -m)" \
         -o /usr/local/bin/docker-compose
-      sudo chmod +x /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
     fi
 
     # Go
@@ -148,19 +163,17 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     fi
     ! source $HOME/.bashrc
 
-    if ask_user "Do you require node?"; then 
-      if ! binary_exists node; then
-        pushd /tmp
-        curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
-        sudo bash nodesource_setup.sh
-        sudo apt install nodejs
-        popd
-      fi
+    if ! binary_exists node && ask_user "Do you require node?"; then 
+      pushd /tmp
+      curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+      sudo bash nodesource_setup.sh
+      sudo apt install nodejs
+      popd
 
       mkdir -p $HOME/.npm-global
       npm config set prefix "$HOME/.npm-global"
     fi
-    
+
     if ! binary_exists tig; then
       pushd /tmp
       wget https://github.com/jonas/tig/releases/download/tig-${tig_version}/tig-${tig_version}.tar.gz

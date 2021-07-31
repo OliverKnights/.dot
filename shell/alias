@@ -70,7 +70,7 @@ alias git-commit-date='git add . && git commit -m "$(date)"'
 alias decode-jwt-header="decode-jwt 1"
 alias decode-jwt-payload="decode-jwt 2"
 
-# Utils (u[XXX])
-alias sourcebash="source $HOME/.bashrc"
+alias rbash="source $HOME/.bashrc"
+alias rzsh="source $HOME/.zshrc"
 
 alias lynx="lynx -vikeys"

@@ -1,0 +1,13 @@
+[legacy]
+theme-variant='light'
+
+[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+audible-bell=false
+background-color='rgb(238,238,236)'
+custom-command='/usr/bin/tmux'
+font='Ubuntu Mono 15'
+foreground-color='rgb(46,52,54)'
+scrollbar-policy='never'
+use-custom-command=true
+use-system-font=false
+use-theme-colors=false

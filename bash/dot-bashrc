@@ -147,10 +147,6 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
   }
 fi
 
-function cd {
-  builtin cd "$@" && ls -F
-}
-
 [ -f "$HOME/.shellenv" ] && source "$HOME/.shellenv"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
