@@ -64,7 +64,6 @@ return require('packer').startup(function()
   use 'airblade/vim-rooter'
   use 'christoomey/vim-tmux-navigator'
   use 'neovim/nvim-lspconfig'
-  use 'jiangmiao/auto-pairs'
   use 'hrsh7th/nvim-compe'
 
   require'compe'.setup {
@@ -102,6 +101,6 @@ return require('packer').startup(function()
   }
 
   use {
-    'gelguy/wilder.nvim'
+    'gelguy/wilder.nvim',
   }
 end)
