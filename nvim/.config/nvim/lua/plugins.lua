@@ -100,4 +100,8 @@ return require('packer').startup(function()
       luasnip = true;
     };
   }
+
+  use {
+    'gelguy/wilder.nvim'
+  }
 end)
