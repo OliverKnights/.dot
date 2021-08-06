@@ -43,7 +43,7 @@ map('n', '<Leader>zf', ':FZF<CR>', { noremap = true })
 
 map('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
 
-map('n', '<Leader>gr', ':silent grep --exclude=\'*.tar.gz\' -R \'\' .<left><left><left>', { noremap = true })
+map('n', '<Leader>gr', ':silent grep --exclude-dir=.git --exclude-dir=node_modules --exclude=\'*.tar.gz\' -R \'\' .<left><left><left>', { noremap = true })
 
 map('n', '<Leader>ss', ':mksession! ~/.local/share/nvim/session/', { noremap = true })
 map('n', '<Leader>so', ':source ~/.local/share/nvim/session/', { noremap = true })
@@ -87,12 +87,13 @@ cmd('autocmd BufWritePost plugins.lua source <afile> | PackerCompile')
 
 require'plugins'
 
+cmd([[let g:sh_fold_enabled=1]])
 
-cmd([[
-call wilder#enable_cmdline_enter()
-cmap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
-cmap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
-call wilder#set_option('modes', ['/', '?', ':'])
-call wilder#set_option('pipeline', [ wilder#branch(wilder#cmdline_pipeline({'language': 'python', 'fuzzy': 1, }), wilder#python_search_pipeline({ 'pattern': wilder#python_fuzzy_pattern(), 'sorter': wilder#python_difflib_sorter(), 'engine': 're', }))])
-call wilder#set_option('renderer', wilder#popupmenu_renderer({'highlighter': wilder#basic_highlighter()}))
-]])
+-- cmd([[
+-- call wilder#enable_cmdline_enter()
+-- cmap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
+-- cmap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
+-- call wilder#set_option('modes', [':'])
+-- call wilder#set_option('pipeline', [ wilder#branch(wilder#cmdline_pipeline({'language': 'python', 'fuzzy': 1, }), wilder#python_search_pipeline({ 'pattern': wilder#python_fuzzy_pattern(), 'sorter': wilder#python_difflib_sorter(), 'engine': 're', }))])
+-- call wilder#set_option('renderer', wilder#popupmenu_renderer({'highlighter': wilder#basic_highlighter()}))
+-- ]])

@@ -36,3 +36,6 @@
 # set "nvim" as tool for merging
 [difftool]
   prompt = true
+
+[push]
+  default = current

@@ -148,6 +148,7 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
 fi
 
 [ -f "$HOME/.shellenv" ] && source "$HOME/.shellenv"
+[ -f "$HOME/.dots/alias" ] && source "$HOME/.shellenv"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 # nvm
