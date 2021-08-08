@@ -50,6 +50,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     tmux \
     tree \
     wget \
+    vim \
     make 
 
   pushd "$dotfiles_dir"
