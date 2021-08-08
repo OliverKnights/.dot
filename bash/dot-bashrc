@@ -195,3 +195,7 @@ export LD_LIBRARY_PATH=/usr/local/lib
 
 export dotfiles_dir="$HOME/.dots"
 export project_dir="$HOME/src"
+
+function cd {
+  builtin cd "$@" && ls -F --color=always
+}

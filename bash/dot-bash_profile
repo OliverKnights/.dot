@@ -11,9 +11,18 @@ fi
 [ -f "$HOME/.shellenv" ] && source "$HOME/.shellenv"
 source "$HOME/.cargo/env"
 
+export VISUAL='nvim'
+export EDITOR='nvim'
+export ALTERNATE_EDITOR=""
+
 export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export GO111MODULE=on
 
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.npm-global/bin
+
+export FZF_DEFAULT_COMMAND="find -L . -type f \
+  ! -path '*/.git/*'"
