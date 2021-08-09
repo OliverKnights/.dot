@@ -14,6 +14,9 @@ set inccommand=nosplit " show replacements in place
 set infercase " smarter completion
 set mouse=a
 
+set viewoptions=folds,cursor,curdir " don't save locally modified options
+set lazyredraw " don't update screen during macros
+set wildcharm=<tab>
 set autoindent
 set smartindent
 
@@ -29,21 +32,32 @@ set browsedir=buffer
 set path=.,,**
 set wildignore=*/vendor/*,*.tar.gz
 
+set runtimepath^=expand(',$HOME/.fzf')
+
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+
 tnoremap <Esc> <C-\><C-n>
 
 let mapleader=" "
-nnoremap <Leader>gr :silent grep --exclude='*.tar.gz' -R '' .<left><left><left>
+nnoremap <Leader>gr :grep --exclude='*.tar.gz' --exclude-dir=.git --exclude-dir=node_modules -R '' .<left><left><left>
+
+nnoremap <Leader>ss :mksession! ~/.local/share/nvim/session/
+nnoremap <Leader>so :source ~/.local/share/nvim/session/
+
+nnoremap <Leader>zf <cmd>FZF<CR>
 
 nnoremap <Leader>bo :bro ol<CR>
 
 nnoremap <Leader>vi <cmd>e $MYVIMRC<cr>
 nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
-nnoremap <Leader>vl <cmd>luafile %<cr>
-nnoremap <Leader>vL <cmd>e ~/.config/nvim/lua<cr>
 
 nnoremap <Leader>fi :fin<space>
 
 " Open in browser
+let g:loaded_netrwPlugin = 0
 nmap gx <Plug>NetrwBrowseX
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())<CR>
 
