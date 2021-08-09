@@ -10,7 +10,15 @@ set hidden " change buffers without saving
 set history=10000 " remember : commands
 set ignorecase " ignore case in searching
 set smartcase " if we use caps in search, turn off ignore case
-set inccommand=nosplit " show replacements in place 
+
+if has('nvim')
+  set inccommand=nosplit " show replacements in place 
+endif
+
+if !has('nvim')
+  set undodir=~/.vim/undo
+endif
+
 set infercase " smarter completion
 set mouse=a
 

@@ -56,12 +56,12 @@ if [[ "$os" =~ "Ubuntu" ]]; then
   pushd "$dotfiles_dir"
 
   for dir in $(ls -d */); do
-    if [[ "$dir" == "shell" ]]; then
-      continue
-    fi
-
     stow --dotfiles "$dir"
   done
+
+  mkdir -p ~/.vim
+  ln -sf ~/.dots/nvim/.config/nvim/init.vim ~/.vim/vimrc
+  ln -sf ~/.dots/nvim/.config/nvim/after/ ~/.vim/after
 
   mkdir -p $HOME/.local/share/nvim/session
 
@@ -105,8 +105,6 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       if ask_user "Do you require the following optional packages: $optional_packages"; then
         sudo apt install -y $optional_packages
       fi
-
-    chsh -s /usr/bin/zsh
 
     # Neovim
     if ! binary_exists nvim; then
