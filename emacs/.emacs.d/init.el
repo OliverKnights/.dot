@@ -372,3 +372,6 @@
   (setq-default evil-escape-key-sequence "fd")
   (evil-escape-mode)
   :ensure t)
+
+(use-package ivy-pass
+  :ensure t)
