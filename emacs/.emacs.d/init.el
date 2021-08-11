@@ -84,8 +84,6 @@
 
 ;; variables
 (defalias 'yes-or-no-p 'y-or-n-p)
-(setq leetcode-save-solutions t)
-(setq leetcode-directory "~/Projects/leetcode")
 
 ;; theme
 (load-theme 'modus-operandi t)
@@ -244,7 +242,7 @@
     (emacs-lisp . t)
     (lisp . t)    ;; slime - lisp interaction mode
     (gnuplot . t)))
-(setq org-agenda-files (list (expand-file-name "~/Projects/notes")))
+(setq org-agenda-files (list (expand-file-name "~/src/wiki")))
 (setq org-refile-targets '(("work.org" :maxlevel . 1)
 			  ("life.org" :maxlevel . 1)
 			  ("archive.org" :maxlevel . 1)))
@@ -344,36 +342,6 @@
   :init
   (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
 
-;; (use-package god-mode
-;;   :ensure t
-;;   :config
-;;   (god-mode)
-
-;;   (defun my-god-mode-update-mode-line ()
-;;     (cond
-;;      (god-local-mode
-;;       (set-face-attribute 'mode-line nil
-;;                           :foreground "#604000"
-;;                           :background "#fff29a")
-;;       (set-face-attribute 'mode-line-inactive nil
-;;                           :foreground "#3f3000"
-;;                           :background "#fff3da"))
-;;      (t
-;;       (set-face-attribute 'mode-line nil
-;; 			              :foreground "#0a0a0a"
-;; 			              :background "#d7d7d7")
-;;       (set-face-attribute 'mode-line-inactive nil
-;; 			              :foreground "#404148"
-;; 			              :background "#efefef"))))
-
-;;   (add-hook 'post-command-hook 'my-god-mode-update-mode-line)
-;;   (global-set-key (kbd "<escape>") #'god-local-mode)
-
-;;   (defun my-god-mode-update-cursor-type ()
-;;     (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-
-;;   (add-hook 'post-command-hook #'my-god-mode-update-cursor-type))
-
 (use-package doom-themes
   :ensure t)
 
@@ -387,5 +355,20 @@
 
 (use-package evil
   :ensure t
+  :init
+  (setq evil-want-keybinding 'nil)
   :config
-  (evil-mode))
+  (evil-mode)
+  (define-key evil-normal-state-map (kbd ";") 'evil-ex)
+  (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char))
+
+(use-package evil-collection
+  :ensure t
+  :config
+  (evil-collection-init))
+
+(use-package evil-escape
+  :config
+  (setq-default evil-escape-key-sequence "fd")
+  (evil-escape-mode)
+  :ensure t)
