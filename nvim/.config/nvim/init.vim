@@ -40,12 +40,23 @@ set browsedir=buffer
 set path=.,,**
 set wildignore=*/vendor/*,*.tar.gz
 
-set runtimepath^=expand(',$HOME/.fzf')
+" Source FZF plugin
+set runtimepath^=$HOME/.fzf
 
 nnoremap ; :
 nnoremap : ;
 vnoremap ; :
 vnoremap : ;
+
+inoremap fd <Esc>
+inoremap df <Esc>
+tnoremap fd <C-\><C-n>
+tnoremap df <C-\><C-n>
+inoremap <Esc> <nop>
+
+" Quickfix list navigation
+nnoremap [q :cp<CR>
+nnoremap ]q :cn<CR>
 
 tnoremap <Esc> <C-\><C-n>
 
@@ -56,8 +67,12 @@ nnoremap <Leader>ss :mksession! ~/.local/share/nvim/session/
 nnoremap <Leader>so :source ~/.local/share/nvim/session/
 
 nnoremap <Leader>zf <cmd>FZF<CR>
+nnoremap <Leader>fd :find <C-R>=fnameescape(expand('%:p:h')).'/**/*'<CR>
 
 nnoremap <Leader>bo :bro ol<CR>
+
+" Make the directory for which the current file should be in
+nnoremap <Leader>m :!mkdir -p %:h<CR>
 
 nnoremap <Leader>vi <cmd>e $MYVIMRC<cr>
 nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
@@ -65,7 +80,7 @@ nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <Leader>fi :fin<space>
 
 " Open in browser
-let g:loaded_netrwPlugin = 0
+" let g:loaded_netrwPlugin = 0
 nmap gx <Plug>NetrwBrowseX
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw_gx")? g:netrw_gx : '<cfile>')),netrw#CheckIfRemote())<CR>
 
@@ -74,3 +89,29 @@ augroup make_view
   autocmd BufWinLeave *.* mkview
   autocmd BufWinEnter *.* silent! loadview 
 augroup END
+
+" Create file-marks for commonly edited file types
+augroup FileMarks
+  autocmd!
+  autocmd BufLeave *.html normal! mH
+  autocmd BufLeave *.go   normal! mG
+  autocmd BufLeave *.vim  normal! mV
+  autocmd BufLeave *.md  normal! mM
+augroup END
+
+tnoremap <M-h> <c-\><c-n><c-w>h
+tnoremap <M-j> <c-\><c-n><c-w>j
+tnoremap <M-k> <c-\><c-n><c-w>k
+tnoremap <M-l> <c-\><c-n><c-w>l
+inoremap <M-h> <Esc><c-w>h
+inoremap <M-j> <Esc><c-w>j
+inoremap <M-k> <Esc><c-w>k
+inoremap <M-l> <Esc><c-w>l
+vnoremap <M-h> <Esc><c-w>h
+vnoremap <M-j> <Esc><c-w>j
+vnoremap <M-k> <Esc><c-w>k
+vnoremap <M-l> <Esc><c-w>l
+nnoremap <M-h> <c-w>h
+nnoremap <M-j> <c-w>j
+nnoremap <M-k> <c-w>k
+nnoremap <M-l> <c-w>l
