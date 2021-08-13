@@ -21,7 +21,7 @@
       show-paren-delay t
       markdown-list-indent-width 2
       kill-buffer-query-functions nil ;; don't confirm when killing a buffer with a process
-      epg-gpg-program "gpg2"
+      epg-gpg-program "gpg"
       epa-pinentry-mode 'loopback ;; enter password for gpg in emacs
       scroll-preserve-screen-position t ;; keep cursor in the same position relative to viewport when scrolling
       custom-file (concat user-emacs-directory "custom.el")
@@ -91,39 +91,6 @@
 ;; bindings
 (global-set-key (kbd "M-o") 'ace-window)
 (global-set-key (kbd "C-x C-j") 'dired-jump)
-
-(global-set-key (kbd "C-c p") 'projectile-command-map)
-
-;;; Windows
-(global-set-key (kbd "C-M-H-s-w C-M-H-s-r") 'split-window-right)
-(global-set-key (kbd "C-M-H-s-w C-M-H-s-b") 'split-window-below)
-(global-set-key (kbd "C-M-H-s-w C-M-H-s-o") 'delete-other-windows)
-(global-set-key (kbd "C-M-H-s-w C-M-H-s-x") 'delete-window)
-
-;;; Buffers
-(global-set-key (kbd "C-M-H-s-b C-M-H-s-r") 'rename-buffer)
-
-;;; Compilation
-(global-set-key (kbd "C-M-H-s-c C-M-H-s-o") 'compile)
-
-;;; LSP
-(global-set-key (kbd "C-M-H-s-l C-M-H-s-d") 'lsp-find-definition)
-(global-set-key (kbd "C-M-H-s-l C-M-H-s-r") 'lsp-find-references)
-(global-set-key (kbd "C-M-H-s-l C-M-H-s-i") 'lsp-goto-implementation)
-
-;;; Utils
-(global-set-key (kbd "C-M-H-s-u C-M-H-s-v") 'multi-vterm)
-(global-set-key (kbd "C-M-H-s-u C-M-H-s-s") 'shell)
-(global-set-key (kbd "C-M-H-s-u C-M-H-s-r") 'replace-regexp)
-
-;; Errors
-(global-set-key (kbd "C-M-H-s-e C-M-H-s-n") 'flymake-goto-next-error)
-(global-set-key (kbd "C-M-H-s-e C-M-H-s-p") 'flymake-goto-prev-error)
-
-(global-set-key (kbd "C-c oa") 'org-agenda)
-
-(global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
-(global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
 
 ;; hooks
 (add-hook 'json-mode-hook
@@ -219,7 +186,9 @@
              :ensure t)
 
 (use-package vterm
-             :ensure t)
+  :ensure t
+  :config
+  (setq vterm-max-scrollback 30000))
 
 (use-package docker
              :ensure t
@@ -358,9 +327,7 @@
   :init
   (setq evil-want-keybinding 'nil)
   :config
-  (evil-mode)
-  (define-key evil-normal-state-map (kbd ";") 'evil-ex)
-  (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char))
+  (evil-mode))
 
 (use-package evil-collection
   :ensure t
@@ -375,3 +342,51 @@
 
 (use-package ivy-pass
   :ensure t)
+
+(use-package counsel-tramp
+  :ensure t)
+
+(use-package general
+  :ensure t
+  :config
+  (general-create-definer my-leader-def
+    ;; :prefix my-leader
+    :prefix "SPC")
+
+  (my-leader-def
+    :states 'normal
+    :keymaps 'override
+    "oa" 'org-agenda
+    "oc" 'org-capture
+
+    "ut" 'counsel-tramp
+    "uv" 'multi-vterm
+
+    "es" 'eval-last-sexp
+    "eb" 'eval-buffer
+
+    "bl" 'ivy-switch-buffer
+    "br" 'rename-buffer
+
+    "pg" 'project-find-regexp
+    "pf" 'projectile-find-file
+
+    "gs" 'magit-status
+
+    "fl" 'find-file
+    "fs" 'save-buffer
+
+    "wr" 'split-window-right
+    "wb" 'split-window-below
+    "wo" 'delete-other-windows
+    "ws" 'frameset-to-register
+    "wl" 'jump-to-register))
+
+;; Disable keys we've rebound
+(global-set-key (kbd "C-x b") 'nil)
+(global-set-key (kbd "C-x 1") 'nil)
+(global-set-key (kbd "C-x 2") 'nil)
+(global-set-key (kbd "C-x 3") 'nil)
+(global-set-key (kbd "C-x C-e") 'nil)
+(global-set-key (kbd "C-x C-f") 'nil)
+(global-set-key (kbd "C-x C-s") 'nil)
