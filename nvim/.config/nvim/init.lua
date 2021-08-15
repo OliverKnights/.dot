@@ -18,3 +18,4 @@ require'plugins'
 
 -- Disable netrw as we have dirvish
 vim.cmd([[let g:loaded_netrwPlugin = 0]])
+

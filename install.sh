@@ -175,6 +175,8 @@ if [[ "$os" =~ "Ubuntu" ]]; then
 
       mkdir -p "$HOME/.npm-global"
       npm config set prefix "$HOME/.npm-global"
+
+      npm install -g pyright
     fi
 
     if ! binary_exists tig; then
