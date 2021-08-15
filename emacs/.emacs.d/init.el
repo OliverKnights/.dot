@@ -80,7 +80,7 @@
 (scroll-bar-mode -1)
 ;;(fido-mode 1)
 (delete-selection-mode 1)
-(electric-pair-mode 1)
+(electric-pair-mode -1)
 
 ;; variables
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -301,8 +301,6 @@
   (my-increment-number-decimal (if arg (- arg) -1)))
 
 (use-package multi-vterm
-  :config
-  (define-key vterm-mode-map (kbd "<escape>") #'god-local-mode)
   :ensure t)
 
 (use-package flymake-shellcheck
@@ -337,6 +335,7 @@
 (use-package evil-escape
   :config
   (setq-default evil-escape-key-sequence "fd")
+  (setq evil-escape-delay 0.15)
   (evil-escape-mode)
   :ensure t)
 
@@ -361,6 +360,7 @@
 
     "ut" 'counsel-tramp
     "uv" 'multi-vterm
+    "ue" 'elfeed
 
     "es" 'eval-last-sexp
     "eb" 'eval-buffer
@@ -380,7 +380,17 @@
     "wb" 'split-window-below
     "wo" 'delete-other-windows
     "ws" 'frameset-to-register
-    "wl" 'jump-to-register))
+    "wl" 'jump-to-register)
+
+  (general-define-key
+   :keymaps 'override
+   :states 'normal
+   "C-b" '(lambda ()
+            (interactive)
+            (evil-scroll-up 0))
+   "C-f" '(lambda ()
+            (interactive)
+            (evil-scroll-down 0))))
 
 ;; Disable keys we've rebound
 (global-set-key (kbd "C-x b") 'nil)
@@ -390,3 +400,9 @@
 (global-set-key (kbd "C-x C-e") 'nil)
 (global-set-key (kbd "C-x C-f") 'nil)
 (global-set-key (kbd "C-x C-s") 'nil)
+
+(use-package smooth-scrolling
+  :ensure t
+  :config
+  (smooth-scrolling-mode 1)
+  (setq smooth-scroll-margin 2))
