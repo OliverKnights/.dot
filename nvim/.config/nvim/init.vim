@@ -5,7 +5,6 @@ set expandtab " use spaces
 set autoread " source file changes
 set autowriteall " auto save
 set background=light
-set clipboard=unnamedplus " copy to system clipboard always
 set hidden " change buffers without saving
 set history=10000 " remember : commands
 set ignorecase " ignore case in searching
@@ -50,6 +49,8 @@ vnoremap : ;
 
 inoremap fd <Esc>
 inoremap df <Esc>
+vnoremap fd <Esc>
+vnoremap df <Esc>
 tnoremap fd <C-\><C-n>
 tnoremap df <C-\><C-n>
 inoremap <Esc> <nop>
@@ -115,3 +116,6 @@ nnoremap <M-h> <c-w>h
 nnoremap <M-j> <c-w>j
 nnoremap <M-k> <c-w>k
 nnoremap <M-l> <c-w>l
+
+let g:sh_fold_enabled = 7
+
