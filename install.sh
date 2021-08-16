@@ -12,13 +12,13 @@ dotfiles_dir="$HOME/.dots"
 # Increase sudo timeout and use single sudo cache across all ttys:
 sudo_conf=/etc/sudoers.d/mycustomconf
 if [[ ! -f "$sudo_conf" ]]; then 
-  echo Defaults:$USER '!tty_tickets', timestamp_timeout=480 | sudo tee -a "$sudo_conf"
+  echo "Defaults:$USER '!tty_tickets', timestamp_timeout=480" | sudo tee -a "$sudo_conf"
 fi
 
 function binary_exists() {
   local binary
   binary="$1"
-  if [[ -x "$(which $1)" ]]; then
+  if [[ -x "$(which "$binary")" ]]; then
     return 0
   fi
 
@@ -27,8 +27,8 @@ function binary_exists() {
 
 function ask_user() {
   question="$1"
-  echo $question
-  read -n1 -p "[y|n]? " optional
+  echo "$question"
+  read -n1 -rp "[y|n]? " optional
   if [[ "$optional" =~ y ]]; then
     return 0
   fi
@@ -36,7 +36,7 @@ function ask_user() {
   return 1
 }
 
-os="$(cat /etc/os-release | grep '^NAME')"
+os="$(grep '^NAME' < /etc/os-release)"
 if [[ "$os" =~ "Ubuntu" ]]; then
   sudo apt update && sudo apt upgrade -y
   sudo apt install -y git
@@ -55,7 +55,11 @@ if [[ "$os" =~ "Ubuntu" ]]; then
 
   pushd "$dotfiles_dir"
 
-  for dir in $(ls -d */); do
+  if [[ -f "$HOME/.bashrc" ]]; then
+    mv ~/.bashrc ~/.bashrc.bak
+  fi
+
+  for dir in bash emacs gpg nvim readline scripts tmux vim zsh; do
     stow --dotfiles "$dir"
   done
 
@@ -63,7 +67,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
   ln -sf ~/.dots/nvim/.config/nvim/init.vim ~/.vim/vimrc
   ln -sf ~/.dots/nvim/.config/nvim/after/ ~/.vim/after
 
-  mkdir -p $HOME/.local/share/nvim/session
+  mkdir -p "$HOME/.local/share/nvim/session"
 
   if ask_user "Minimal install?"; then
     exit 0
@@ -103,7 +107,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     meld \
     mutt"
       if ask_user "Do you require the following optional packages: $optional_packages"; then
-        sudo apt install -y $optional_packages
+        sudo apt install -y "$optional_packages"
       fi
 
     # Neovim
@@ -134,7 +138,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
         $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
               sudo apt update
               sudo apt install -y docker-ce
-              sudo usermod -aG docker ${USER}
+              sudo usermod -aG docker "${USER}"
     fi
 
     # Docker Compose
@@ -157,10 +161,10 @@ if [[ "$os" =~ "Ubuntu" ]]; then
 
     # FZF
     if ! binary_exists fzf; then
-      git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
-      $HOME/.fzf/install
+      git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+      "$HOME/.fzf/install"
     fi
-    ! source $HOME/.bashrc
+    ! source "$HOME/.bashrc"
 
     if ! binary_exists node && ask_user "Do you require node?"; then 
       pushd /tmp
@@ -169,8 +173,10 @@ if [[ "$os" =~ "Ubuntu" ]]; then
       sudo apt install nodejs
       popd
 
-      mkdir -p $HOME/.npm-global
+      mkdir -p "$HOME/.npm-global"
       npm config set prefix "$HOME/.npm-global"
+
+      npm install -g pyright
     fi
 
     if ! binary_exists tig; then
