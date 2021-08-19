@@ -199,3 +199,8 @@ export project_dir="$HOME/src"
 function cd {
   builtin cd "$@" && ls -F --color=always
 }
+
+vterm_prompt_end(){
+    vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
+}
+PS1=$PS1'\[$(vterm_prompt_end)\]'
