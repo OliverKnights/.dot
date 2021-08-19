@@ -2,7 +2,6 @@
 
 (setq comp-deferred-compilation t
       ring-bell-function 'ignore
-      org-clock-sound "/usr/share/sounds/sound-icons/prompt.wav"
       c-basic-offset 4
       c-basic-indent 4
       confirm-kill-emacs 'y-or-n-p
@@ -14,11 +13,16 @@
       dired-listing-switches "-alh"
       confirm-kill-processes nil
       package-enable-at-startup nil
+
+      ;; Org
       org-confirm-babel-evaluate nil
+      org-clock-sound "/usr/share/sounds/sound-icons/prompt.wav"
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t
+
       tramp-default-method "ssh"
       inhibit-startup-screen t
       initial-scratch-message ""
-      show-paren-delay t
       explicit-shell-file-name "/bin/bash"
       markdown-list-indent-width 2
       kill-buffer-query-functions nil ;; don't confirm when killing a buffer with a process
@@ -77,10 +81,11 @@
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
 ;; (desktop-save-mode 1)
-;; (show-paren-mode 1)
+(show-paren-mode 1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(savehist-mode 1) ;; Save minibuffer history
 ;;(fido-mode 1)
 (delete-selection-mode 1)
 (electric-pair-mode -1)
