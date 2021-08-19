@@ -9,7 +9,8 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 [ -f "$HOME/.shellenv" ] && source "$HOME/.shellenv"
-source "$HOME/.cargo/env"
+[ -f "$HOME/.dots/alias" ] && source "$HOME/.shellenv"
+[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
 export VISUAL='nvim'
 export EDITOR='nvim'

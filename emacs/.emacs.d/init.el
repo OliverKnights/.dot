@@ -19,6 +19,7 @@
       inhibit-startup-screen t
       initial-scratch-message ""
       show-paren-delay t
+      explicit-shell-file-name "/bin/bash"
       markdown-list-indent-width 2
       kill-buffer-query-functions nil ;; don't confirm when killing a buffer with a process
       epg-gpg-program "gpg"
@@ -38,6 +39,8 @@
 (add-hook 'sh-mode-hook #'turn-off-indent-tabs-mode)
 (add-hook 'sh-mode-hook #'flymake-mode)
 (add-hook 'markdown-mode-hook #'turn-off-indent-tabs-mode)
+(add-hook 'markdown-mode-hook #'variable-pitch-mode)
+(add-hook 'org-mode-hook #'variable-pitch-mode)
 
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -90,7 +93,6 @@
 
 ;; bindings
 (global-set-key (kbd "M-o") 'ace-window)
-(global-set-key (kbd "C-x C-j") 'dired-jump)
 
 ;; hooks
 (add-hook 'json-mode-hook
@@ -124,7 +126,7 @@
 
 (use-package company
              :ensure t
-             :hook (after-init . global-company-mode))
+             :hook (go-mode . company-mode))
 
 (use-package company-go
              :ensure t)
@@ -248,14 +250,14 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-(setq my-tramp-ssh-completions
-      '((tramp-parse-sconfig "~/.ssh/config")
-        (tramp-parse-shosts "~/.ssh/known_hosts")))
+;; (setq my-tramp-ssh-completions
+;;       '((tramp-parse-sconfig "~/.ssh/config")
+;;         (tramp-parse-shosts "~/.ssh/known_hosts")))
 
-(eval-after-load "tramp"
-                 '(mapc (lambda (method)
-                          (tramp-set-completion-function method my-tramp-ssh-completions))
-                        '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh")))
+;; (eval-after-load "tramp"
+;;                  '(mapc (lambda (method)
+;;                           (tramp-set-completion-function method my-tramp-ssh-completions))
+;;                         '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh")))
 
 (use-package plantuml-mode
              :ensure t
@@ -360,15 +362,18 @@
 
     "ut" 'counsel-tramp
     "uv" 'multi-vterm
-    "ue" 'elfeed
+    "us" 'shell
 
     "es" 'eval-last-sexp
     "eb" 'eval-buffer
 
     "bl" 'ivy-switch-buffer
     "br" 'rename-buffer
+    "bx" 'kill-buffer-and-window
 
-    "pg" 'project-find-regexp
+    "pp" 'projectile-switch-project
+    "pr" 'counsel-projectile-rg
+    "pg" 'projectile-grep
     "pf" 'projectile-find-file
 
     "gs" 'magit-status
@@ -383,8 +388,14 @@
     "wl" 'jump-to-register)
 
   (general-define-key
+    :states 'visual
+    :keymaps 'override
+    "gc" 'comment-dwim)
+
+  (general-define-key
    :keymaps 'override
    :states 'normal
+   "-" 'dired-jump
    "C-b" '(lambda ()
             (interactive)
             (evil-scroll-up 0))
@@ -406,3 +417,15 @@
   :config
   (smooth-scrolling-mode 1)
   (setq smooth-scroll-margin 2))
+
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown"))
+
+;; (setq remote-file-name-inhibit-cache nil)
+;; (setq vc-handled-backends '(Git))
+;; (setq tramp-verbose 1)
+
+(use-package counsel-projectile
+  :ensure t)

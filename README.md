@@ -6,6 +6,13 @@
 bash <(curl -s https://raw.githubusercontent.com/OliverKnights/.dots/master/install.sh)
 ```
 
+# Increase sudo timeout and use single sudo cache across all ttys
+
+``` bash
+# Defaults:<username> !tty_tickets, timestamp_timeout=480
+visudo -f /etc/sudoers.d/mysudoconf 
+```
+
 ## Gnome terminal
 
 ``` sh

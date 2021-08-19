@@ -48,11 +48,9 @@ vnoremap ; :
 vnoremap : ;
 
 inoremap fd <Esc>
-inoremap df <Esc>
 vnoremap fd <Esc>
-vnoremap df <Esc>
+vnoremap fd <Esc>
 tnoremap fd <C-\><C-n>
-tnoremap df <C-\><C-n>
 inoremap <Esc> <nop>
 
 " Quickfix list navigation
@@ -76,6 +74,8 @@ nnoremap <Leader>bo :bro ol<CR>
 nnoremap <Leader>m :!mkdir -p %:h<CR>
 
 nnoremap <Leader>vi <cmd>e $MYVIMRC<cr>
+nnoremap <Leader>vp <cmd>e ~/.config/nvim/lua/plugins.lua<cr>
+nnoremap <Leader>vv <cmd>e ~/.vim/vimrc<cr>
 nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
 
 nnoremap <Leader>fi :fin<space>

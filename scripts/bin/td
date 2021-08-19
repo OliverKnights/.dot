@@ -1,21 +1,22 @@
 #!/bin/bash
 
 td_home=$HOME/.local/share/td
-todo="$HOME/todo.txt"
-archive="$HOME/archive.txt"
-task_notes="$HOME/task_notes"
+todo_root="$HOME/src"
+todo="$todo_root/todo.txt"
+archive="$todo_root/archive.txt"
+task_notes="$todo_root/task_notes"
 current_task_desc="${td_home}/current/description"
 current_task_filename="${td_home}/current/filename"
 current_task_number="${td_home}/current/number"
 
-mkdir -p $td_home/current
+mkdir -p "$td_home/current"
 
 cmd="$1"
 
 # Print the current task
 if [[ -z "$cmd" ]]; then
   if [[ -s $current_task_desc ]]; then
-    cat $current_task_desc
+    cat "$current_task_desc"
   else
     echo "No Current task"
   fi
@@ -24,13 +25,13 @@ fi
 
 # Print last 50 lines of todos
 if [[ "$cmd" == "p" ]]; then
-  tail -n50 $todo
+  tail -n50 "$todo"
   exit 0
 fi
 
 # Edit todos manually
 if [[ "$cmd" == "e" ]]; then
-  nvim + $todo
+  nvim + "$todo"
   exit 0
 fi
 
@@ -62,7 +63,7 @@ fi
 if [[ "$cmd" == "d" ]]; then
   if [[ -s $current_task_desc ]]; then
     cat $current_task_desc >> $archive
-    sed -i "/^${number}\./d" $todo
+    sed -i "/^$(cat $current_task_number)\./d" $todo
     rm $current_task_desc
     rm $current_task_filename
   else

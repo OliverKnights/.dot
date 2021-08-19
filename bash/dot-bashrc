@@ -118,15 +118,9 @@ if [ "$TERM" != "dumb" ]; then
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 fi
 
-# Custom ls colors
-eval "$(dircolors $dotfiles_dir/misc/dircolors)"
-
-source "$dotfiles_dir/bash/sync-history.sh"
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-source "$HOME/.cargo/env"
 
 vterm_printf(){
   if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
@@ -147,27 +141,13 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
   }
 fi
 
-[ -f "$HOME/.shellenv" ] && source "$HOME/.shellenv"
-[ -f "$HOME/.dots/alias" ] && source "$HOME/.shellenv"
-[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-
 # nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-# fasd
-eval "$(fasd --init auto)"
-
-if [ -f ~/.dir_colors ]; then
-  eval `dircolors ~/.dir_colors`
-fi
-
 # This should stay in .bashrc according to `man gpg-agent`
 GPG_TTY=$(tty)
 export GPG_TTY
-
-source <(kubectl completion bash)
-source <(minikube completion bash)
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -199,3 +179,8 @@ export project_dir="$HOME/src"
 function cd {
   builtin cd "$@" && ls -F --color=always
 }
+
+vterm_prompt_end(){
+    vterm_printf "51;A$(whoami)@$(hostname):$(pwd)"
+}
+PS1=$PS1'\[$(vterm_prompt_end)\]'

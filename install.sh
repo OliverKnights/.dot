@@ -9,12 +9,6 @@ tig_version=2.3.3
 
 dotfiles_dir="$HOME/.dots"
 
-# Increase sudo timeout and use single sudo cache across all ttys:
-sudo_conf=/etc/sudoers.d/mycustomconf
-if [[ ! -f "$sudo_conf" ]]; then 
-  echo "Defaults:$USER '!tty_tickets', timestamp_timeout=480" | sudo tee -a "$sudo_conf"
-fi
-
 function binary_exists() {
   local binary
   binary="$1"
@@ -62,10 +56,6 @@ if [[ "$os" =~ "Ubuntu" ]]; then
   for dir in bash emacs gpg nvim readline scripts tmux vim zsh; do
     stow --dotfiles "$dir"
   done
-
-  mkdir -p ~/.vim
-  ln -sf ~/.dots/nvim/.config/nvim/init.vim ~/.vim/vimrc
-  ln -sf ~/.dots/nvim/.config/nvim/after/ ~/.vim/after
 
   mkdir -p "$HOME/.local/share/nvim/session"
 
@@ -121,6 +111,8 @@ if [[ "$os" =~ "Ubuntu" ]]; then
         popd
     fi
 
+    curl -sS https://webinstall.dev/zoxide | bash
+
     pip3 install neovim neovim-remote
 
     # Gh
@@ -157,7 +149,8 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     fi
 
     GO111MODULE=on go get golang.org/x/tools/gopls@latest
-    go get -u github.com/jstemmer/gotags
+    GO111MODULE=on go get -u github.com/jstemmer/gotags
+    GO111MODULE=on go get -u github.com/mikefarah/yq
 
     # FZF
     if ! binary_exists fzf; then

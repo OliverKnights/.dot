@@ -4,7 +4,17 @@ return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  use 'justinmk/vim-dirvish'
+  use {
+    'justinmk/vim-dirvish',
+    config = function()
+      vim.cmd([[
+        augroup dirvish_config
+          autocmd!
+          autocmd FileType dirvish nnoremap <silent><buffer> D :Shdo rm -rf {}<CR> 
+        augroup END
+      ]])
+    end
+  }
 
   -- Load on a combination of conditions: specific filetypes or commands
   -- Also run code after load (see the "config" key)
@@ -15,8 +25,28 @@ return require('packer').startup(function()
     config = 'vim.cmd[[ALEEnable]]'
   }
 
-  -- Plugins can have post-install/update hooks
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
+  use 'airblade/vim-rooter'
+  
+  use {
+    'junegunn/fzf.vim',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<Leader>bl', '<cmd>Buffers<cr>', { noremap=true, silent=true })
+      vim.api.nvim_set_keymap('n', '<Leader>fl', '<cmd>Files<cr>', { noremap=true, silent=true })
+      vim.api.nvim_set_keymap('n', '<Leader>pr', '<cmd>Rg<cr>', { noremap=true, silent=true })
+    end
+  }
+
+  use {
+    'tpope/vim-fugitive',
+    config = function()
+      vim.api.nvim_set_keymap('n', '<Leader>gs', '<cmd>vert G<cr>', { noremap=true, silent=true })
+    end
+  }
+
+  use 'tpope/vim-eunuch'
+  use 'tpope/vim-endwise'
+  use 'tpope/vim-speeddating'
+  use 'tpope/vim-unimpaired'
 
   -- Post-install/update hook with neovim command
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
@@ -61,7 +91,7 @@ return require('packer').startup(function()
 
       -- Use a loop to conveniently call 'setup' on multiple servers and
       -- map buffer local keybindings when the language server attaches
-      local servers = { 'pyright', 'bashls' }
+      local servers = { 'pyright', 'bashls', 'gopls' }
       for _, lsp in ipairs(servers) do
         nvim_lsp[lsp].setup {
           on_attach = on_attach,
