@@ -1,3 +1,4 @@
 .zcompdump
 gpg/.gnupg/*
 emacs/*
+vim/.vim/view
