@@ -53,7 +53,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     mv ~/.bashrc ~/.bashrc.bak
   fi
 
-  for dir in bash emacs gpg nvim readline scripts tmux vim zsh; do
+  for dir in bash gpg readline scripts; do
     stow --dotfiles "$dir"
   done
 

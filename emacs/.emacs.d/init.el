@@ -2,7 +2,6 @@
 
 (setq comp-deferred-compilation t
       ring-bell-function 'ignore
-      org-clock-sound "/usr/share/sounds/sound-icons/prompt.wav"
       c-basic-offset 4
       c-basic-indent 4
       confirm-kill-emacs 'y-or-n-p
@@ -14,11 +13,21 @@
       dired-listing-switches "-alh"
       confirm-kill-processes nil
       package-enable-at-startup nil
-      org-confirm-babel-evaluate nil
+      gc-cons-threshold (* 8 1024 1024)
+      help-window-select t                   ; Focus new help windows when opened
+      sentence-end-double-space nil          ; Use a single space after dots
+      tab-always-indent 'complete            ; Tab indents first then tries completions
+      uniquify-buffer-name-style 'forward    ; Uniquify buffer names
+      warning-minimum-level :error           ; Skip warning buffers
+
+      read-process-output-max (* 1024 1024)  ; Increase read size per process
+
+      scroll-conservatively 101              ; Avoid recentering when scrolling far
+      scroll-margin 2                        ; Add a margin when scrolling vertically
+
       tramp-default-method "ssh"
       inhibit-startup-screen t
       initial-scratch-message ""
-      show-paren-delay t
       explicit-shell-file-name "/bin/bash"
       markdown-list-indent-width 2
       kill-buffer-query-functions nil ;; don't confirm when killing a buffer with a process
@@ -72,18 +81,21 @@
            (when buffer-file-name (save-buffer)))
 
 ;; modes
+(blink-cursor-mode 0)                   ; Prefer a still cursor
 (auto-save-visited-mode 1)
 (global-hl-line-mode 1)
 (global-visual-line-mode 1)
 (global-auto-revert-mode 1)
-;; (desktop-save-mode 1)
-;; (show-paren-mode 1)
+(show-paren-mode 1)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(savehist-mode 1) ;; Save minibuffer history
 ;;(fido-mode 1)
 (delete-selection-mode 1)
 (electric-pair-mode -1)
+;; might be useful at some point
+;;(global-subword-mode 1)                 ; Iterate through CamelCase words
 
 ;; variables
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -93,6 +105,12 @@
 
 ;; bindings
 (global-set-key (kbd "M-o") 'ace-window)
+
+;; Garbage-collect on focus-out, Emacs should feel snappier overall.
+(add-function :after after-focus-change-function
+  (defun me/garbage-collect-maybe ()
+    (unless (frame-focus-state)
+      (garbage-collect))))
 
 ;; hooks
 (add-hook 'json-mode-hook
@@ -124,12 +142,10 @@
   :ensure t
   :mode ("Jenkinsfile\\'" . groovy-mode))
 
-(use-package company
-             :ensure t
-             :hook (go-mode . company-mode))
+(use-package corfu
+  :hook
+  (after-init . corfu-global-mode))
 
-(use-package company-go
-             :ensure t)
 
 (use-package restclient
              :ensure t)
@@ -151,6 +167,11 @@
              :config (progn
                        ;; use flycheck, not flymake
                        (setq lsp-prefer-flymake nil)))
+(lsp-register-client
+    (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
+                     :major-modes '(go-mode)
+                     :remote? t
+                     :server-id 'gopls-remote))
 
 (use-package go-mode
              :ensure t
@@ -158,9 +179,6 @@
                     (go-mode . (lambda ()
                                  (setq tab-width 4
                                        indent-tabs-mode 1)))
-                    (go-mode . (lambda ()
-                                 (set (make-local-variable 'company-backends) '(company-go))
-                                 (company-mode)))
                     (before-save . lsp-format-buffer)
                     (before-save . lsp-organize-imports)
                     (before-save . gofmt-before-save)))
@@ -226,6 +244,13 @@
 
 (use-package ob-async
              :ensure t)
+
+(use-package org
+  :custom
+  (org-confirm-babel-evaluate nil)
+  (org-clock-sound "/usr/share/sounds/sound-icons/prompt.wav")
+  (org-src-fontify-natively t)
+  (org-src-tab-acts-natively t))
 
 (use-package expand-region
              :ensure t
@@ -308,8 +333,8 @@
 (use-package flymake-shellcheck
   :ensure t
   :commands flymake-shellcheck-load
-  :init
-  (add-hook 'sh-mode-hook 'flymake-shellcheck-load))
+  :hook ((sh-mode . lsp-deferred-mode)
+         (sh-mode . flymake-shellcheck-load)))
 
 (use-package doom-themes
   :ensure t)
@@ -369,7 +394,7 @@
 
     "bl" 'ivy-switch-buffer
     "br" 'rename-buffer
-    "bx" 'kill-buffer-and-window
+    "bx" 'kill-this-buffer
 
     "pp" 'projectile-switch-project
     "pr" 'counsel-projectile-rg
@@ -384,6 +409,7 @@
     "wr" 'split-window-right
     "wb" 'split-window-below
     "wo" 'delete-other-windows
+    "wx" 'delete-window
     "ws" 'frameset-to-register
     "wl" 'jump-to-register)
 
@@ -412,11 +438,11 @@
 (global-set-key (kbd "C-x C-f") 'nil)
 (global-set-key (kbd "C-x C-s") 'nil)
 
-(use-package smooth-scrolling
-  :ensure t
-  :config
-  (smooth-scrolling-mode 1)
-  (setq smooth-scroll-margin 2))
+;; (use-package smooth-scrolling
+;;   :ensure t
+;;   :config
+;;   (smooth-scrolling-mode 1)
+;;   (setq smooth-scroll-margin 2))
 
 (use-package markdown-mode
   :ensure t
@@ -429,3 +455,37 @@
 
 (use-package counsel-projectile
   :ensure t)
+
+(use-package desktop
+  :hook
+  (after-init . desktop-read)
+  (after-init . desktop-save-mode)
+  :custom
+  (desktop-restore-eager 4)
+  (desktop-restore-forces-onscreen nil)
+  (desktop-restore-frames t))
+
+(use-package shackle
+  :ensure t
+  :hook
+  (after-init . shackle-mode)
+  :custom
+  (shackle-inhibit-window-quit-on-same-windows t)
+  (shackle-rules '((help-mode :same t)
+                   (helpful-mode :same t)
+                   (process-menu-mode :same t)))
+  (shackle-select-reused-windows t))
+
+(use-package marginalia
+  :ensure t
+  ;; Either bind `marginalia-cycle` globally or only in the minibuffer
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+
+  ;; The :init configuration is always executed (Not lazy!)
+  :init
+
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  (marginalia-mode))
