@@ -60,7 +60,7 @@ nnoremap ]q :cn<CR>
 tnoremap <Esc> <C-\><C-n>
 
 let mapleader=" "
-nnoremap <Leader>gr :grep --exclude='*.tar.gz' --exclude-dir=.git --exclude-dir=node_modules -R '' .<left><left><left>
+nnoremap <Leader>gr :grep --exclude='*.tar.gz' --exclude-dir=.git --exclude-dir=vendor --exclude-dir=node_modules -R '' .<left><left><left>
 
 nnoremap <Leader>ss :mksession! ~/.local/share/nvim/session/
 nnoremap <Leader>so :source ~/.local/share/nvim/session/

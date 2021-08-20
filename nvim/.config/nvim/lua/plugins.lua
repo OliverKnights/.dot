@@ -44,6 +44,7 @@ return require('packer').startup(function()
   }
 
   use 'tpope/vim-eunuch'
+  use 'tpope/vim-commentary'
   use 'tpope/vim-endwise'
   use 'tpope/vim-speeddating'
   use 'tpope/vim-unimpaired'
