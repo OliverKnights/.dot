@@ -1,20 +1,15 @@
-# Get the aliases and functions
-if [ -f ~/.bashrc ]; then
-  . ~/.bashrc
-fi
+export VISUAL='nvim'
+export EDITOR='nvim'
+export ALTERNATE_EDITOR=""
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-  PATH="$HOME/bin:$PATH"
-fi
-
+[ -f ~/.bashrc ] && source ~/.bashrc
 [ -f "$HOME/.shellenv" ] && source "$HOME/.shellenv"
 [ -f "$HOME/.dots/alias" ] && source "$HOME/.shellenv"
 [ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
 
-export VISUAL='nvim'
-export EDITOR='nvim'
-export ALTERNATE_EDITOR=""
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/src/bin" ] && PATH="$HOME/src/bin:$PATH"
+
 
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
