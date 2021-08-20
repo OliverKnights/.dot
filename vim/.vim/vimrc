@@ -87,8 +87,8 @@ nnoremap <silent> <Plug>NetrwBrowseX :call netrw#BrowseX(expand((exists("g:netrw
 
 augroup make_view
   autocmd!
-  autocmd BufWinLeave *.* mkview
-  autocmd BufWinEnter *.* silent! loadview 
+  autocmd BufWinLeave * mkview
+  autocmd BufWinEnter * silent! loadview 
 augroup END
 
 " Create file-marks for commonly edited file types
