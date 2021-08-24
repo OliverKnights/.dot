@@ -351,96 +351,11 @@
   :config
   (projectile-mode 1))
 
-(use-package evil
-  :ensure t
-  :init
-  (setq evil-want-keybinding 'nil)
-  :config
-  (evil-mode))
-
-(use-package evil-collection
-  :ensure t
-  :config
-  (evil-collection-init))
-
-(use-package evil-escape
-  :config
-  (setq-default evil-escape-key-sequence "fd")
-  (setq evil-escape-delay 0.15)
-  (evil-escape-mode)
-  :ensure t)
-
 (use-package ivy-pass
   :ensure t)
 
 (use-package counsel-tramp
   :ensure t)
-
-(use-package general
-  :ensure t
-  :config
-  (general-create-definer my-leader-def
-    ;; :prefix my-leader
-    :prefix "SPC")
-
-  (my-leader-def
-    :states 'normal
-    :keymaps 'override
-    "oa" 'org-agenda
-    "oc" 'org-capture
-
-    "ut" 'counsel-tramp
-    "uv" 'multi-vterm
-    "us" 'shell
-
-    "es" 'eval-last-sexp
-    "eb" 'eval-buffer
-
-    "bl" 'ivy-switch-buffer
-    "br" 'rename-buffer
-    "bx" 'kill-this-buffer
-
-    "pp" 'projectile-switch-project
-    "pr" 'counsel-projectile-rg
-    "pg" 'projectile-grep
-    "pf" 'projectile-find-file
-
-    "gs" 'magit-status
-
-    "fl" 'find-file
-    "fs" 'save-buffer
-
-    "wr" 'split-window-right
-    "wb" 'split-window-below
-    "wo" 'delete-other-windows
-    "wx" 'delete-window
-    "ws" 'frameset-to-register
-    "wl" 'jump-to-register)
-
-  (general-define-key
-    :states 'visual
-    :keymaps 'override
-    "gc" 'comment-dwim)
-
-  (general-define-key
-   :keymaps 'override
-   :states 'normal
-   "-" 'dired-jump
-   "C-b" '(lambda ()
-            (interactive)
-            (evil-scroll-up 0))
-   "C-f" '(lambda ()
-            (interactive)
-            (evil-scroll-down 0))))
-
-;; Disable keys we've rebound
-(global-set-key (kbd "C-x b") 'nil)
-(global-set-key (kbd "C-x 1") 'nil)
-(global-set-key (kbd "C-x 2") 'nil)
-(global-set-key (kbd "C-x 3") 'nil)
-(global-set-key (kbd "C-x C-e") 'nil)
-(global-set-key (kbd "C-x C-f") 'nil)
-(global-set-key (kbd "C-x C-s") 'nil)
 
 ;; (use-package smooth-scrolling
 ;;   :ensure t
