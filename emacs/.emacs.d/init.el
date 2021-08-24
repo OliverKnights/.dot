@@ -50,6 +50,7 @@
 (add-hook 'markdown-mode-hook #'turn-off-indent-tabs-mode)
 (add-hook 'markdown-mode-hook #'variable-pitch-mode)
 (add-hook 'org-mode-hook #'variable-pitch-mode)
+(add-hook 'elfeed-mode-hook #'variable-pitch-mode)
 
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -127,13 +128,13 @@
 (defun my-c++-mode-hook ()
   (c-set-style "my-style"))
 
-(add-hook 'c++-mode-hook 'my-c++-mode-hook)
-(add-hook 'before-save-hook (lambda () (delete-trailing-whitespace)))
-;; packages
-(use-package ace-window
-  :config
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?;))
-             :ensure t)
+;; (add-hook 'c++-mode-hook 'my-c++-mode-hook)
+;; (add-hook 'before-save-hook (lambda () (delete-trailing-whitespace)))
+;; ;; packages
+;; (use-package ace-window
+;;   :config
+;;   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?;))
+;;              :ensure t)
 
 (use-package groovy-mode
              :ensure t)
@@ -142,9 +143,10 @@
   :ensure t
   :mode ("Jenkinsfile\\'" . groovy-mode))
 
-(use-package corfu
-  :hook
-  (after-init . corfu-global-mode))
+;; (use-package corfu
+;;   :ensure t
+;;   :hook
+;;   (after-init . corfu-global-mode))
 
 
 (use-package restclient
@@ -166,12 +168,14 @@
              :commands (lsp lsp-deferred)
              :config (progn
                        ;; use flycheck, not flymake
-                       (setq lsp-prefer-flymake nil)))
-(lsp-register-client
-    (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
-                     :major-modes '(go-mode)
-                     :remote? t
-                     :server-id 'gopls-remote))
+                       (setq lsp-prefer-flymake nil))
+
+             (lsp-register-client
+              (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
+                               :major-modes '(go-mode)
+                               :remote? t
+                               :server-id 'gopls-remote)))
+
 
 (use-package go-mode
              :ensure t
@@ -275,14 +279,14 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; (setq my-tramp-ssh-completions
-;;       '((tramp-parse-sconfig "~/.ssh/config")
-;;         (tramp-parse-shosts "~/.ssh/known_hosts")))
+(setq my-tramp-ssh-completions
+      '((tramp-parse-sconfig "~/.ssh/config")
+        (tramp-parse-shosts "~/.ssh/known_hosts")))
 
-;; (eval-after-load "tramp"
-;;                  '(mapc (lambda (method)
-;;                           (tramp-set-completion-function method my-tramp-ssh-completions))
-;;                         '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh")))
+(eval-after-load "tramp"
+                 '(mapc (lambda (method)
+                          (tramp-set-completion-function method my-tramp-ssh-completions))
+                        '("fcp" "rsync" "scp" "scpc" "scpx" "sftp" "ssh")))
 
 (use-package plantuml-mode
              :ensure t
@@ -449,9 +453,9 @@
   :mode ("README\\.md\\'" . gfm-mode)
   :init (setq markdown-command "multimarkdown"))
 
-;; (setq remote-file-name-inhibit-cache nil)
-;; (setq vc-handled-backends '(Git))
-;; (setq tramp-verbose 1)
+(setq remote-file-name-inhibit-cache nil)
+(setq vc-handled-backends '(Git))
+(setq tramp-verbose 1)
 
 (use-package counsel-projectile
   :ensure t)
