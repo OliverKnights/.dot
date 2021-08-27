@@ -24,6 +24,21 @@ return require('packer').startup(function()
     end
   }
 
+  use {
+    'kristijanhusak/orgmode.nvim',
+    config = function()
+      require('orgmode').setup{}
+    end
+  }
+
+  use {
+    'tpope/vim-dadbod'
+  }
+
+  use {
+    'kristijanhusak/vim-dadbod-ui'
+  }
+
   -- Load on a combination of conditions: specific filetypes or commands
   -- Also run code after load (see the "config" key)
   use {
