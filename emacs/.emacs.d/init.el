@@ -131,10 +131,10 @@
 ;; (add-hook 'c++-mode-hook 'my-c++-mode-hook)
 ;; (add-hook 'before-save-hook (lambda () (delete-trailing-whitespace)))
 ;; ;; packages
-;; (use-package ace-window
-;;   :config
-;;   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?;))
-;;              :ensure t)
+(use-package ace-window
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?;))
+             :ensure t)
 
 (use-package groovy-mode
              :ensure t)
