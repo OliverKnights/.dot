@@ -67,7 +67,6 @@
 (if (file-exists-p "~/.emacs.d/private.el")
   (load "~/.emacs.d/private.el"))
 
-
 ;; This should be project local really, I think the list of ignores should be like .gitignore patterns
 (setq-default project-vc-ignores (list "vendor/"))
 
