@@ -66,7 +66,7 @@
 
 (if (file-exists-p "~/.emacs.d/private.el")
   (load "~/.emacs.d/private.el"))
-(load "view.el")
+
 
 ;; This should be project local really, I think the list of ignores should be like .gitignore patterns
 (setq-default project-vc-ignores (list "vendor/"))
@@ -470,6 +470,8 @@
 (global-set-key (kbd "C-c uv") 'multi-vterm)
 (global-set-key (kbd "C-x pf") 'projectile-find-file)
 (global-set-key (kbd "C-x pg") 'projectile-grep)
+
+(load "view.el")
 
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
