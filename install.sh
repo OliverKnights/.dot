@@ -64,6 +64,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
   fi
 
   sudo apt install -y \
+    urlview \
     zsh \
     tig \
     entr \
@@ -86,7 +87,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     gnupg \
     lsb-release
 
-  optional_packages="network-manager-openvpn \
+  optional_packages=( network-manager-openvpn \
     gnome-tweak-tool \
     tlp \
     g++ \
@@ -95,9 +96,9 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     texlive-full \
     newsboat \
     meld \
-    mutt"
-      if ask_user "Do you require the following optional packages: $optional_packages"; then
-        sudo apt install -y "$optional_packages"
+    mutt )
+      if ask_user "Do you require the following optional packages: ${optional_packages[*]}"; then
+        sudo apt install -y "${optional_packages[@]}"
       fi
 
     # Neovim
@@ -150,7 +151,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
 
     GO111MODULE=on go get golang.org/x/tools/gopls@latest
     GO111MODULE=on go get -u github.com/jstemmer/gotags
-    GO111MODULE=on go get -u github.com/mikefarah/yq
+    GO111MODULE=on go get github.com/mikefarah/yq/v4
 
     # FZF
     if ! binary_exists fzf; then

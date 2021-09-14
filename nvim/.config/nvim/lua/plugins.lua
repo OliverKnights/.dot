@@ -5,23 +5,15 @@ return require('packer').startup(function()
   use 'wbthomason/packer.nvim'
 
   use {
-    'justinmk/vim-dirvish',
-    config = function()
-      vim.cmd([[
-        augroup dirvish_config
-          autocmd!
-          autocmd FileType dirvish nnoremap <silent><buffer> D :Shdo rm -rf {}<CR> 
-        augroup END
-      ]])
-    end
-  }
-
-  use {
     "folke/which-key.nvim",
     config = function()
       require("which-key").setup {
       }
     end
+  }
+  
+  use {
+    "tpope/vim-vinegar"
   }
 
   use {

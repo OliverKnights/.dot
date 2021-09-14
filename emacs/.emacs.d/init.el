@@ -49,8 +49,8 @@
 (add-hook 'sh-mode-hook #'flymake-mode)
 (add-hook 'markdown-mode-hook #'turn-off-indent-tabs-mode)
 (add-hook 'markdown-mode-hook #'variable-pitch-mode)
+(add-hook 'rst-mode-hook #'variable-pitch-mode)
 (add-hook 'org-mode-hook #'variable-pitch-mode)
-(add-hook 'elfeed-mode-hook #'variable-pitch-mode)
 
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -302,6 +302,9 @@
       '(("archive.org" :maxlevel . 1)
         ("life.org" :maxlevel . 1)))
 
+(use-package org-roam
+  :ensure t)
+
 (use-package vue-mode
              :ensure t)
 (add-hook 'vue-mode-hook 'lsp-deferred)
@@ -469,8 +472,19 @@
 (global-set-key (kbd "C-c uv") 'multi-vterm)
 (global-set-key (kbd "C-x pf") 'projectile-find-file)
 (global-set-key (kbd "C-x pg") 'projectile-grep)
+(global-set-key (kbd "C-c up") 'ivy-pass)
 
 (load "view.el")
 
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
+
+(global-set-key (kbd "C-c np") 'gumshoe-backtrack-back)
+(global-set-key (kbd "C-c nn") 'gumshoe-backtrack-forward)
+
+(global-set-key (kbd "C-c pp") 'counsel-projectile-switch-project)
+
+(use-package gumshoe
+  :ensure t
+  :config
+  (global-gumshoe-mode 1))
