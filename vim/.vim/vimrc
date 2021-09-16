@@ -99,6 +99,11 @@ augroup FileMarks
   autocmd BufLeave *.md  normal! mM
 augroup END
 
+augroup FileMarks
+  autocmd!
+  autocmd BufLeave *.shlib set filetype=sh
+augroup END
+
 tnoremap <M-h> <c-\><c-n><c-w>h
 tnoremap <M-j> <c-\><c-n><c-w>j
 tnoremap <M-k> <c-\><c-n><c-w>k
@@ -117,4 +122,8 @@ nnoremap <M-k> <c-w>k
 nnoremap <M-l> <c-w>l
 
 let g:sh_fold_enabled = 7
+
+" Markdown navigation
+nnoremap <Leader>um :vimgrep '^#' % \| cope<cr>
+
 

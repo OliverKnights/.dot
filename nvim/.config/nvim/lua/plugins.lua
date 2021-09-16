@@ -17,6 +17,13 @@ return require('packer').startup(function()
   }
 
   use {
+    "dhruvasagar/vim-table-mode",
+    config = function()
+      vim.cmd([[let g:table_mode_auto_align = 1]])
+    end
+  }
+
+  use {
     'kristijanhusak/orgmode.nvim',
     config = function()
       require('orgmode').setup{}
