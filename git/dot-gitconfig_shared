@@ -39,3 +39,5 @@
 
 [push]
   default = current
+[init]
+  templatedir = ~/.dots/git-templates
