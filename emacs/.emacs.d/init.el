@@ -411,69 +411,6 @@
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
-;; -(use-package general
-;; -  :ensure t
-;; -  :config
-;; -  (general-create-definer my-leader-def
-;; -    ;; :prefix my-leader
-;; -    :prefix "SPC")
-;; -
-;; -  (my-leader-def
-;; -    :states 'normal
-;; -    :keymaps 'override
-;; -    "oa" 'org-agenda
-;; -    "oc" 'org-capture
-;; -
-;; -    "ut" 'counsel-tramp
-;; -    "uv" 'multi-vterm
-;; -    "us" 'shell
-;; -
-;; -    "es" 'eval-last-sexp
-;; -    "eb" 'eval-buffer
-;; -
-;; -    "bl" 'ivy-switch-buffer
-;; -    "br" 'rename-buffer
-;; -    "bx" 'kill-this-buffer
-;; -
-;; -    "pp" 'projectile-switch-project
-;; -    "pr" 'counsel-projectile-rg
-;; -    "pg" 'projectile-grep
-;; -    "pf" 'projectile-find-file
-;; -
-;; -    "gs" 'magit-status
-;; -
-;; -    "fl" 'find-file
-;; -    "fs" 'save-buffer
-;; -
-;; -    "wr" 'split-window-right
-;; -    "wb" 'split-window-below
-;; -    "wo" 'delete-other-windows
-;; -    "wx" 'delete-window
-;; -    "ws" 'frameset-to-register
-;; -    "wl" 'jump-to-register)
-;; -
-;; -  (general-define-key
-;; -    :states 'visual
-;; -    :keymaps 'override
-;; -    "gc" 'comment-dwim)
-;; -
-;; -  (general-define-key
-;; -   :keymaps 'override
-;; -   :states 'normal
-;; -   "-" 'dired-jump
-;; -   "C-b" '(lambda ()
-;; -            (interactive)
-;; -            (evil-scroll-up 0))
-;; -   "C-f" '(lambda ()
-;; -            (interactive)
-;; -            (evil-scroll-down 0))))
-
-(global-set-key (kbd "C-c ut") 'counsel-tramp)
-(global-set-key (kbd "C-c uv") 'multi-vterm)
-(global-set-key (kbd "C-x pf") 'projectile-find-file)
-(global-set-key (kbd "C-x pg") 'projectile-grep)
-(global-set-key (kbd "C-c up") 'ivy-pass)
-
 (load "view.el")
 
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)

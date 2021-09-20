@@ -53,7 +53,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     mv ~/.bashrc ~/.bashrc.bak
   fi
 
-  for dir in bash gpg readline scripts; do
+  for dir in vim nvim bash gpg readline scripts; do
     stow --dotfiles "$dir"
   done
 
@@ -69,7 +69,20 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     tig \
     entr \
     shellcheck \
+    clang \
+    flex \
+    bison \
+    jfsutils \
+    reiserfsprogs \
+    xfsprogs \
+    btrfs-progs \
+    quota \
+    nfs-common \
+    udev \
+    libtool \
     build-essential \
+    python3-sphinx \
+    python3-sphinx-rtd-theme \
     ca-certificates \
     make \
     cmake \
@@ -90,6 +103,7 @@ if [[ "$os" =~ "Ubuntu" ]]; then
   optional_packages=( network-manager-openvpn \
     gnome-tweak-tool \
     tlp \
+    pass \
     g++ \
     pandoc \
     htop \
@@ -97,9 +111,10 @@ if [[ "$os" =~ "Ubuntu" ]]; then
     newsboat \
     meld \
     mutt )
-      if ask_user "Do you require the following optional packages: ${optional_packages[*]}"; then
-        sudo apt install -y "${optional_packages[@]}"
-      fi
+
+    if ask_user "Do you require the following optional packages: ${optional_packages[*]}"; then
+      sudo apt install -y "${optional_packages[@]}"
+    fi
 
     # Neovim
     if ! binary_exists nvim; then
@@ -141,24 +156,13 @@ if [[ "$os" =~ "Ubuntu" ]]; then
               sudo chmod +x /usr/local/bin/docker-compose
     fi
 
-    # Go
+    # Languages
     if ! binary_exists go; then
       pushd /tmp
       wget https://golang.org/dl/go${go_version}.linux-amd64.tar.gz
       sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go${go_version}.linux-amd64.tar.gz
       popd
     fi
-
-    GO111MODULE=on go get golang.org/x/tools/gopls@latest
-    GO111MODULE=on go get -u github.com/jstemmer/gotags
-    GO111MODULE=on go get github.com/mikefarah/yq/v4
-
-    # FZF
-    if ! binary_exists fzf; then
-      git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
-      "$HOME/.fzf/install"
-    fi
-    ! source "$HOME/.bashrc"
 
     if ! binary_exists node && ask_user "Do you require node?"; then 
       pushd /tmp
@@ -172,6 +176,19 @@ if [[ "$os" =~ "Ubuntu" ]]; then
 
       npm install -g pyright
     fi
+
+    GO111MODULE=on go get golang.org/x/tools/gopls@latest
+    GO111MODULE=on go get -u github.com/jstemmer/gotags
+    GO111MODULE=on go get github.com/mikefarah/yq/v4
+
+    sudo snap install ccls --classic
+
+    # FZF
+    if ! binary_exists fzf; then
+      git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
+      "$HOME/.fzf/install"
+    fi
+    ! source "$HOME/.bashrc"
 
     if ! binary_exists tig; then
       pushd /tmp

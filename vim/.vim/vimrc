@@ -47,12 +47,6 @@ nnoremap : ;
 vnoremap ; :
 vnoremap : ;
 
-inoremap fd <Esc>
-vnoremap fd <Esc>
-vnoremap fd <Esc>
-tnoremap fd <C-\><C-n>
-inoremap <Esc> <nop>
-
 " Quickfix list navigation
 nnoremap [q :cp<CR>
 nnoremap ]q :cn<CR>
