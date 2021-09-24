@@ -93,10 +93,13 @@ augroup FileMarks
   autocmd BufLeave *.md  normal! mM
 augroup END
 
-augroup FileMarks
+augroup ft
   autocmd!
-  autocmd BufLeave *.shlib set filetype=sh
+  autocmd BufEnter *.shlib set filetype=sh
 augroup END
+
+" Assume it's always bash
+let g:is_bash	   = 1
 
 tnoremap <M-h> <c-\><c-n><c-w>h
 tnoremap <M-j> <c-\><c-n><c-w>j
